@@ -1,2 +1,2 @@
-# twitch_moderation_back
+# twitch-moderation-back
  help to moderate a chat and report bad behaviours

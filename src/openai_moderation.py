@@ -12,9 +12,10 @@ def generate_moderation(input):
     response = client.moderations.create(input=input)
     return response
 
-def parse_moderation(moderation):
+def parse_moderation(moderation, input):
     dictionnary_moderation = \
         {
+            'input' : input,
             'flagged' : moderation.results[0].flagged,
             'categories' : {
                 'harassment' : {
@@ -69,9 +70,9 @@ def parse_moderation(moderation):
 
 def main_moderation(input):
     moderation = generate_moderation(input)
-    return parse_moderation(moderation)
+    return parse_moderation(moderation, input)
 
 if __name__ == "__main__":
     input = "I think that the government is doing a terrible job"
     moderation = generate_moderation(input)
-    print(parse_moderation(moderation))
+    print(parse_moderation(moderation, input))

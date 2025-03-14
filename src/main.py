@@ -6,6 +6,7 @@ from top_topics import main_topics
 from pydantic import BaseModel
 from fastapi import FastAPI
 from typing import List
+import os
 
 app = FastAPI()
 
@@ -27,7 +28,8 @@ class QuestionsInput(BaseModel):
 origins = [
     "http://localhost",
     "http://localhost:3000",
-    "https://twitch-moderation-front.vercel.app/",  # Remplacez par votre URL Vercel
+    "https://twitch-moderation-front.vercel.app",  # Sans la barre oblique finale
+    "*",  # Option pour autoriser toutes les origines pendant les tests
 ]
 
 app.add_middleware(
@@ -63,6 +65,17 @@ def get_topics(input: TopicsInput):
     Receives a JSON body with a list of topics and returns a list of JSON objects.
     """
     return main_topics(input.comments, input.n_clusters, input.n_samples, input.model_generation, input.model_embedding)
+
+@app.get("/test")
+def test():
+    """
+    Simple test endpoint to check if the API is running correctly.
+    """
+    return {
+        "message": "API is running correctly",
+        "openai_key_exists": bool(os.environ.get("OPENAI_API_KEY")),
+        "origins": origins
+    }
 
 # Gardez ce bloc, mais avec une condition qui vérifie s'il s'exécute directement
 if __name__ == "__main__":

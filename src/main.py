@@ -23,11 +23,11 @@ class QuestionsInput(BaseModel):
     model_generation: str = "gpt-3.5-turbo"
     model_embedding: str = "text-embedding-ada-002"
 
-# CORS settings
+# CORS settings - Ajoutez votre URL Vercel ici
 origins = [
     "http://localhost",
-    "http://localhost:3000",  # Assuming your frontend runs on this port
-    # Add more origins as needed
+    "http://localhost:3000",
+    "https://twitch-moderation-front.vercel.app/",  # Remplacez par votre URL Vercel
 ]
 
 app.add_middleware(
@@ -37,7 +37,6 @@ app.add_middleware(
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
-
 
 @app.get("/")
 def read_root():
@@ -65,6 +64,7 @@ def get_topics(input: TopicsInput):
     """
     return main_topics(input.comments, input.n_clusters, input.n_samples, input.model_generation, input.model_embedding)
 
+# Gardez ce bloc, mais avec une condition qui vérifie s'il s'exécute directement
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
